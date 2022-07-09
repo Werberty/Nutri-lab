@@ -5,7 +5,6 @@ from django.conf import settings
 from django.contrib import auth, messages
 from django.contrib.auth.models import User
 from django.contrib.messages import constants
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import Ativacao
@@ -39,9 +38,13 @@ def cadastro(request):
             ativacao.save()
 
             path_template = os.path.join(
-                settings.BASE_DIR, 'autenticacao/templates/emails/cadastro_confirmado.html')
+                settings.BASE_DIR,
+                'autenticacao/templates/emails/cadastro_confirmado.html'
+            )
             email_html(path_template, 'Cadastro confirmado',
-                       [email, ], username=username, link_ativacao=f"127.0.0.1:8000/auth/ativar_conta/{token}")
+                       [email, ], username=username,
+                       link_ativacao=f"127.0.0.1:8000/auth/ativar_conta/{token}"  # noqa: E501
+                       )
 
             messages.add_message(request, constants.SUCCESS,
                                  'Usuário cadastrado com sucesso.')
@@ -71,7 +74,7 @@ def logar(request):
             return redirect('/auth/logar')
         else:
             auth.login(request, usuario)
-            return redirect('/')
+            return redirect('/pacientes/')
 
 
 def sair(request):
